@@ -48,7 +48,7 @@ def main():
     ap.add_argument("--gb-scope", choices=["global", "subset"], default="global",
                     help="g_B konumu tüm evren (global, gerçek) mi alt-küme-göreli (üst-sınır) mi")
     ap.add_argument("--emb-cache", default=None,
-                    help="embedding npz cache yolu (DB'ye değil; tekrar-koşu hızlanır)")
+                    help="embedding npz cache path (not stored in the DB; speeds up re-runs)")
     args = ap.parse_args()
 
     p = CoreParams() if args.synthetic_params else tief_params.DEFAULT
