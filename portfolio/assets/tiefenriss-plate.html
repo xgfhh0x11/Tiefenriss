@@ -1,0 +1,278 @@
+<style>
+  :root {
+    --ink: #0e1218;
+    --paper: #e7eaee;
+    --surface: #f3f5f7;
+    --text: #1a2029;
+    --muted: #5a6675;
+    --faint: #8892a0;
+    --line: #cdd3da;
+    --accent: #2f7d8c;         /* steel-teal — instrument / measured */
+    --accent-soft: #d3e2e5;
+    --ember: #b06a3e;          /* the fault line / null result */
+    --ember-soft: #ecd8c8;
+    --quarantine: #9a7b2e;
+    --grid: rgba(20,30,45,.05);
+    --plate-shadow: 0 1px 0 rgba(255,255,255,.6), 0 18px 44px -28px rgba(20,30,45,.5);
+    --serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, "PT Serif", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0e1218; --surface: #161c25; --text: #dbe1e9; --muted: #93a0b0;
+      --faint: #67727f; --line: #28303c; --accent: #59b3c4; --accent-soft: #1a3238;
+      --ember: #d98c5c; --ember-soft: #37271d; --quarantine: #cba94e;
+      --grid: rgba(120,150,180,.06);
+      --plate-shadow: 0 0 0 1px rgba(255,255,255,.03), 0 24px 60px -30px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #e7eaee; --surface: #f3f5f7; --text: #1a2029; --muted: #5a6675;
+    --faint: #8892a0; --line: #cdd3da; --accent: #2f7d8c; --accent-soft: #d3e2e5;
+    --ember: #b06a3e; --ember-soft: #ecd8c8; --quarantine: #9a7b2e;
+    --grid: rgba(20,30,45,.05); --plate-shadow: 0 1px 0 rgba(255,255,255,.6), 0 18px 44px -28px rgba(20,30,45,.5);
+  }
+  :root[data-theme="dark"] {
+    --paper: #0e1218; --surface: #161c25; --text: #dbe1e9; --muted: #93a0b0;
+    --faint: #67727f; --line: #28303c; --accent: #59b3c4; --accent-soft: #1a3238;
+    --ember: #d98c5c; --ember-soft: #37271d; --quarantine: #cba94e;
+    --grid: rgba(120,150,180,.06); --plate-shadow: 0 0 0 1px rgba(255,255,255,.03), 0 24px 60px -30px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--text);
+    font-family: var(--sans); line-height: 1.6;
+    font-size: 16px; letter-spacing: .002em;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px);
+    background-size: 100% 30px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 40px) 64px; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); display: flex; align-items: center; gap: 12px; margin: 0 0 20px;
+  }
+  .eyebrow::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+
+  h1 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(40px, 8.5vw, 76px);
+    line-height: .98; letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .sub {
+    font-family: var(--serif); font-size: clamp(18px, 2.6vw, 23px); font-style: italic;
+    color: var(--muted); margin: 18px 0 0; max-width: 34ch; line-height: 1.4; text-wrap: balance;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 26px;
+    font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: .04em;
+  }
+  .meta b { color: var(--muted); font-weight: 600; }
+
+  .lede {
+    margin: 40px 0 8px; padding: 20px 24px; border-left: 2px solid var(--ember);
+    background: linear-gradient(90deg, var(--ember-soft), transparent 85%);
+    font-size: 17px; max-width: 62ch;
+  }
+  .lede b { color: var(--text); }
+
+  h2 {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin: 56px 0 20px; display: flex; align-items: baseline; gap: 10px;
+  }
+  h2 .n { color: var(--accent); }
+
+  /* ---- strata (architecture as a geological cross-section) ---- */
+  .strata { position: relative; border-radius: 10px; overflow: hidden; box-shadow: var(--plate-shadow); }
+  .strata::after {   /* the fault line — Tiefenriss */
+    content: ""; position: absolute; top: -4%; bottom: -4%; left: 63%;
+    width: 2px; background: var(--ember); transform: rotate(9deg); transform-origin: center;
+    opacity: .8; box-shadow: 0 0 0 3px color-mix(in srgb, var(--ember) 12%, transparent);
+    pointer-events: none;
+  }
+  .layer {
+    position: relative; background: var(--surface); padding: 18px 22px;
+    border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 120px 1fr; gap: 6px 20px; align-items: baseline;
+  }
+  .layer:last-child { border-bottom: 0; }
+  .layer .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; padding-top: 2px;
+  }
+  .layer .body { font-size: 14.5px; color: var(--text); }
+  .layer .body .d { color: var(--muted); font-size: 13.5px; }
+  .layer.core { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+  .layer.core .formula { font-family: var(--mono); font-size: 13px; color: var(--text); margin-top: 4px; letter-spacing: .01em; }
+  .depthscale {
+    display: grid; place-content: center; writing-mode: vertical-rl; text-orientation: mixed;
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--faint);
+    position: absolute; right: 8px; top: 0; bottom: 0;
+  }
+
+  /* epistemic status legend — certainty encoded in FILL, not just color */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; }
+  .st { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; color: var(--muted); }
+  .dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .dot.measured { background: var(--accent); }
+  .dot.derived { background: linear-gradient(90deg, var(--accent) 50%, transparent 50%); box-shadow: inset 0 0 0 1px var(--accent); }
+  .dot.open { background: transparent; box-shadow: inset 0 0 0 1.5px var(--faint); }
+  .dot.quarantine { background: transparent; box-shadow: inset 0 0 0 1.5px var(--quarantine); background-image: repeating-linear-gradient(45deg, var(--quarantine) 0 1.5px, transparent 1.5px 4px); }
+
+  /* ---- findings table ---- */
+  .findings { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .findings th {
+    text-align: left; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--faint); font-weight: 600; padding: 0 14px 10px 0; border-bottom: 1px solid var(--line);
+  }
+  .findings td { padding: 16px 14px 16px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .findings tr:last-child td { border-bottom: 0; }
+  .findings .what { color: var(--text); font-weight: 500; max-width: 30ch; }
+  .findings .what .sub2 { display: block; color: var(--muted); font-weight: 400; font-size: 13px; margin-top: 3px; }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: .01em; white-space: nowrap; }
+  .num.pos { color: var(--accent); }
+  .num.null { color: var(--ember); }
+  .num.dim { color: var(--faint); }
+  .verdict { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .verdict.kill { color: var(--ember); }
+  .verdict.hold { color: var(--accent); }
+
+  .concl {
+    margin-top: 52px; padding: 28px 30px; border-radius: 10px;
+    background: var(--surface); box-shadow: var(--plate-shadow); position: relative; overflow: hidden;
+  }
+  .concl::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--ember); }
+  .concl h3 { font-family: var(--serif); font-size: 22px; margin: 0 0 12px; letter-spacing: -.01em; }
+  .concl p { margin: 0 0 12px; max-width: 64ch; font-size: 15px; }
+  .concl p:last-child { margin-bottom: 0; }
+  .concl .q { color: var(--muted); font-style: italic; font-family: var(--serif); }
+
+  .demo { margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--line); border-radius: 10px; overflow: hidden; box-shadow: var(--plate-shadow); }
+  .demo .cell { background: var(--surface); padding: 20px 22px; }
+  .demo .cell h4 { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  .demo .cell p { margin: 0; font-size: 13.5px; color: var(--muted); }
+
+  footer {
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11.5px; color: var(--faint); letter-spacing: .04em;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+  }
+
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  .reveal:nth-child(2){animation-delay:.05s} .reveal:nth-child(3){animation-delay:.1s}
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; opacity: 1; transform: none; } .strata::after { transform: rotate(9deg); } }
+
+  @media (max-width: 560px) {
+    .layer { grid-template-columns: 1fr; gap: 4px; }
+    .strata::after { left: 72%; }
+    .findings .hide-sm { display: none; }
+  }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow reveal">Independent research · security engineering</p>
+  <h1 class="reveal">Tiefenriss</h1>
+  <p class="sub reveal">A prosthetic eye for low-level exploitability — and an honest test of whether it sees.</p>
+  <div class="meta reveal">
+    <span><b>Solo</b>, several weeks</span>
+    <span><b>Python</b> · sealed core</span>
+    <span><b>~11,200</b> real CVEs · Linux + Windows</span>
+    <span><b>Age 18</b></span>
+  </div>
+
+  <p class="lede">
+    A decision-intelligence system that ranks kernel/hypervisor attack surfaces by exploitability value.
+    <b>Its central hypothesis did not survive contact with real data — and reporting that clearly,
+    rather than hiding it, is the project's main result.</b>
+  </p>
+
+  <h2><span class="n">01</span> Architecture — a cross-section</h2>
+  <div class="strata reveal">
+    <span class="depthscale">depth →</span>
+    <div class="layer">
+      <span class="tag">AI-arm</span>
+      <span class="body">Multi-lens discovery → falsifiable, mechanism-level predictions.
+        <span class="d">Recorded to a notebook with a day-one <em>held-out control group</em> to detect self-fulfilling bias.</span></span>
+    </div>
+    <div class="layer">
+      <span class="tag">Data layer</span>
+      <span class="body">Status-typed &amp; source-agnostic — every field carries value + epistemic status + provenance.
+        <span class="legend">
+          <span class="st"><span class="dot measured"></span>measured</span>
+          <span class="st"><span class="dot derived"></span>derived</span>
+          <span class="st"><span class="dot open"></span>open <span style="color:var(--faint)">(≠ null)</span></span>
+          <span class="st"><span class="dot quarantine"></span>quarantined</span>
+        </span>
+      </span>
+    </div>
+    <div class="layer">
+      <span class="tag">Adapter</span>
+      <span class="body">Maps real signals — CWE value ruler, graph position — onto the core's inputs.</span>
+    </div>
+    <div class="layer core">
+      <span class="tag">Sealed core</span>
+      <span class="body">A fixed mathematical model, never modified once formalized. Element-agnostic.
+        <span class="formula">v = v0·(g_A + w·g_B) &nbsp;·&nbsp; G = v·(α·π + β·ρ) &nbsp;·&nbsp; D = σ(k·(G − θ))</span>
+        <span class="d" style="margin-top:6px;display:block">7/7 regression held across every experiment — fed differently, touched never.</span></span>
+    </div>
+  </div>
+
+  <h2><span class="n">02</span> Method — falsify your own design</h2>
+  <div style="overflow-x:auto">
+  <table class="findings">
+    <thead>
+      <tr><th>What was tested</th><th class="hide-sm">Signal</th><th>Result</th><th>Verdict</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="what">Graph "relatedness intelligence" (g_A)
+          <span class="sub2">Tried three ways: shared-CWE, file co-occurrence, semantic embeddings.</span></td>
+        <td class="num dim hide-sm">controlled<br>partial-corr</td>
+        <td class="num null">ρ ≈ 0.00<br><span class="num dim">(hub-artifact 0.91)</span></td>
+        <td class="verdict kill">removed ×3</td>
+      </tr>
+      <tr>
+        <td class="what">Temporal backtest of intrinsic value
+          <span class="sub2">Freeze model as-of 2023 → predict 2024–26 (data already in hand).</span></td>
+        <td class="num dim hide-sm">v0 → future<br>value-char.</td>
+        <td class="num pos">+0.333<br><span class="num dim">p &lt; 0.0001</span></td>
+        <td class="verdict hold">signal held</td>
+      </tr>
+      <tr>
+        <td class="what">External anchor — does value predict real exploitation?
+          <span class="sub2">MSRC Exploitability Index (Windows) &amp; EPSS (Linux).</span></td>
+        <td class="num dim hide-sm">v0 × ground-<br>truth</td>
+        <td class="num null">−0.047 · +0.023<br><span class="num dim">two domains</span></td>
+        <td class="verdict kill">unanchored</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="concl reveal">
+    <h3>The honest conclusion</h3>
+    <p>The value model — the heart of the system — is <b>not externally anchored</b> to any generic exploitation
+      signal, across two operating systems and three independent ground-truths. The central hypothesis was
+      <b>not supported</b>.</p>
+    <p>There is a real tension I state rather than bury: the design intends value to be <span class="q">perspective-relative</span>
+      — an exploit developer's notion of a good primitive is not a generic attacker's likelihood of mass-exploitation.
+      The null results are consistent with that intent — yet that same intent is what makes the model hard to
+      falsify with generic data. Whether the eye is a genuine predictor or a perspective-relative heuristic is the
+      open question the project ends on, honestly unresolved.</p>
+  </div>
+
+  <h2><span class="n">03</span> What it demonstrates</h2>
+  <div class="demo reveal">
+    <div class="cell"><h4>System design</h4><p>Four layers with clean, independently-testable seams; a sealed core that absorbed a second domain by adding one module — no rewrite.</p></div>
+    <div class="cell"><h4>Epistemic discipline in code</h4><p>Measured / derived / open / quarantined as first-class status, with a barrier that stops "unknown" being used as "known".</p></div>
+    <div class="cell"><h4>Research method</h4><p>Pre-registered expectations, controlled &amp; partial-correlation tests, and a reusable backtest harness that settles a hypothesis in minutes, not months.</p></div>
+    <div class="cell"><h4>Intellectual honesty</h4><p>Killed my own most-cherished idea three times over, and accepted the decisive negative result instead of rationalizing it.</p></div>
+  </div>
+
+  <footer>
+    <span>Tiefenriss — "deep rift"</span>
+    <span>the eye, turned on its own assumptions</span>
+  </footer>
+</div>
