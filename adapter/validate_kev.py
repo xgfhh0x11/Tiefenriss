@@ -50,7 +50,7 @@ def validate(decisions: dict, surfaces: dict, kev_ids: set) -> dict:
     PASSIVE GUARD: does not run if kev_ids is absent — prevents circularity/empty-run.
     """
     if not kev_ids:
-        return {"status": "pasif", "reason": "KEV verisi yok — kanca aktif değil"}
+        return {"status": "inactive", "reason": "no KEV data — hook not active"}
 
     sid_members = {s.sid: s.members for s in surfaces.values()}
     per_tier_hit = Counter()
@@ -72,7 +72,7 @@ def validate(decisions: dict, surfaces: dict, kev_ids: set) -> dict:
     monotone = rates["stratejik"] >= rates["taktik"] >= rates["atla"]
 
     return {
-        "status": "aktif",
+        "status": "active",
         "base_rate": base_rate,
         "tier_kev_hit_rate": rates,
         "stratejik_lift": lift,          # >1 expected (attention ↔ unseen exploitation)
